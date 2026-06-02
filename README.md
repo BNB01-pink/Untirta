@@ -1,2 +1,2 @@
-# Untirta
+# ExploreUntirta
 Informasi kampus
