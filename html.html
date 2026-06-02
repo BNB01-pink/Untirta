@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explore UNTIRTA SS — Belajar, Jelajah, Berkarya</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --gold: #f5c842;
+    --gold-light: #fde97a;
+    --white: #ffffff;
+    --cream: #fdfaf0;
+    --dark: #0d1526;
+    --glass: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  .bg {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #0d1526 0%, #1a2744 50%, #0d1a3a 100%);
+  }
+  .bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 20% 20%, rgba(245,200,66,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 80%, rgba(26,39,68,0.8) 0%, transparent 60%);
+    animation: bgPulse 8s ease-in-out infinite alternate;
+  }
+  @keyframes bgPulse {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+  }
+
+  /* Floating orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.25;
+    pointer-events: none;
+  }
+  .orb1 {
+    width: 400px; height: 400px;
+    background: var(--gold);
+    top: -100px; left: -100px;
+    animation: float1 12s ease-in-out infinite;
+  }
+  .orb2 {
+    width: 300px; height: 300px;
+    background: #2a4a9f;
+    bottom: -50px; right: -50px;
+    animation: float2 15s ease-in-out infinite;
+  }
+  @keyframes float1 {
+    0%,100% { transform: translate(0,0); }
+    50% { transform: translate(60px, 40px); }
+  }
+  @keyframes float2 {
+    0%,100% { transform: translate(0,0); }
+    50% { transform: translate(-40px, -60px); }
+  }
+
+  /* Grid texture overlay */
+  .grid-overlay {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(245,200,66,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,200,66,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo-ring {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #d4a800);
+    box-shadow: 0 0 40px rgba(245,200,66,0.4), 0 0 80px rgba(245,200,66,0.15);
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .logo-ring::before {
+    content: '';
+    position: absolute; inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(245,200,66,0.3);
+    animation: ringPulse 3s ease-in-out infinite;
+  }
+  @keyframes ringPulse {
+    0%,100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.08); opacity: 0.2; }
+  }
+  .logo-ring img {
+    width: 62px; height: 62px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .logo-emoji { font-size: 38px; }
+
+  .site-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #ffffff 0%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .site-subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .tagline {
+    margin-top: 14px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    font-style: italic;
+    letter-spacing: 0.3px;
+  }
+  .tagline span {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 1px;
+    background: var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 32px;
+    border: 1px solid var(--glass-border);
+    animation: fadeUp 0.8s 0.2s both;
+  }
+  .stat {
+    flex: 1;
+    text-align: center;
+    padding: 14px 8px;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .stat-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  /* Link cards */
+  .links-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 0.3s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .link-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .link-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(245,200,66,0.08), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .link-card:hover {
+    transform: translateY(-2px) scale(1.01);
+    border-color: rgba(245,200,66,0.4);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 20px rgba(245,200,66,0.1);
+  }
+  .link-card:hover::before { opacity: 1; }
+  .link-card:active { transform: scale(0.98); }
+
+  .link-card.featured {
+    background: linear-gradient(135deg, rgba(245,200,66,0.15), rgba(245,200,66,0.05));
+    border-color: rgba(245,200,66,0.35);
+  }
+
+  .card-icon {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.08);
+    position: relative; z-index: 1;
+  }
+  .card-icon.gold-bg { background: linear-gradient(135deg, var(--gold), #d4a800); }
+  .card-icon.navy-bg { background: linear-gradient(135deg, #2a4a9f, #1a2744); }
+  .card-icon.green-bg { background: linear-gradient(135deg, #2d7d3a, #1a4d24); }
+  .card-icon.purple-bg { background: linear-gradient(135deg, #6b3fa0, #3d1f6e); }
+  .card-icon.red-bg { background: linear-gradient(135deg, #c0392b, #7d1a14); }
+  .card-icon.teal-bg { background: linear-gradient(135deg, #1a7a7a, #0d4d4d); }
+
+  .card-text { flex: 1; position: relative; z-index: 1; }
+  .card-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--white);
+    line-height: 1.2;
+  }
+  .card-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+  }
+
+  .card-arrow {
+    font-size: 16px;
+    color: rgba(255,255,255,0.3);
+    transition: transform 0.3s, color 0.3s;
+    position: relative; z-index: 1;
+  }
+  .link-card:hover .card-arrow {
+    transform: translateX(4px);
+    color: var(--gold);
+  }
+
+  .badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: var(--gold);
+    color: var(--dark);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  /* Campus info card */
+  .info-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    padding: 22px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 0.4s both;
+  }
+  .info-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .info-dot {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba(245,200,66,0.12);
+    border: 1px solid rgba(245,200,66,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .info-text-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .info-text-sub {
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    margin-top: 1px;
+  }
+
+  /* Quote */
+  .quote-card {
+    background: linear-gradient(135deg, rgba(245,200,66,0.08), rgba(26,39,68,0.5));
+    border: 1px solid rgba(245,200,66,0.2);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 28px;
+    text-align: center;
+    animation: fadeUp 0.8s 0.5s both;
+    position: relative;
+  }
+  .quote-mark {
+    font-size: 60px;
+    line-height: 0.5;
+    color: rgba(245,200,66,0.2);
+    font-family: 'Playfair Display', serif;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .quote-text {
+    font-style: italic;
+    color: rgba(255,255,255,0.8);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .quote-text em {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* Social */
+  .social-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 0.6s both;
+  }
+  .social-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    text-decoration: none;
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+  }
+  .social-btn:hover {
+    background: rgba(255,255,255,0.12);
+    color: var(--white);
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.25);
+  }
+  .social-btn .s-icon { font-size: 16px; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    animation: fadeUp 0.8s 0.7s both;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+  }
+  .footer-address {
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    margin-top: 4px;
+  }
+  .made-with {
+    margin-top: 12px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .made-with span { color: rgba(245,200,66,0.4); }
+
+  /* Scroll animation stagger for cards */
+  .links-group .link-card:nth-child(1) { animation-delay: 0.35s; animation: cardIn 0.6s 0.35s both; }
+  .links-group .link-card:nth-child(2) { animation: cardIn 0.6s 0.42s both; }
+  .links-group .link-card:nth-child(3) { animation: cardIn 0.6s 0.49s both; }
+  .links-group .link-card:nth-child(4) { animation: cardIn 0.6s 0.56s both; }
+  .links-group .link-card:nth-child(5) { animation: cardIn 0.6s 0.63s both; }
+  .links-group .link-card:nth-child(6) { animation: cardIn 0.6s 0.70s both; }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Ripple on click */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(245,200,66,0.25);
+    transform: scale(0);
+    animation: rippleAnim 0.6s linear;
+    pointer-events: none;
+  }
+  @keyframes rippleAnim {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(245,200,66,0.2), transparent);
+    margin: 8px 0 20px;
+  }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="grid-overlay"></div>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-ring">
+      <span class="logo-emoji">🎓</span>
+    </div>
+    <div class="site-name">UNTIRTA SS</div>
+    <div class="site-subtitle">Universitas Sultan Ageng Tirtayasa</div>
+    <div class="tagline"><span>Belajar</span> · <span>Jelajah</span> · <span>Berkarya</span></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value">Modern</div>
+      <div class="stat-label">Fasilitas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">Hijau</div>
+      <div class="stat-label">Kampus</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">Inovatif</div>
+      <div class="stat-label">Lingkungan</div>
+    </div>
+  </div>
+
+  <!-- Main Links -->
+  <div class="section-label">🔗 Jelajahi Kampus</div>
+  <div class="links-group" id="main-links">
+
+    <a class="link-card featured" href="#virtual-tour" onclick="showModal('tour')">
+      <div class="card-icon gold-bg">🗺️</div>
+      <div class="card-text">
+        <div class="card-title">Virtual Tour Kampus</div>
+        <div class="card-desc">Jelajahi kampus UNTIRTA SS secara virtual 360°</div>
+      </div>
+      <div class="card-arrow">→</div>
+      <div class="badge">Baru</div>
+    </a>
+
+    <a class="link-card" href="#facilities" onclick="showModal('fasilitas')">
+      <div class="card-icon navy-bg">🏛️</div>
+      <div class="card-text">
+        <div class="card-title">Fasilitas Kampus</div>
+        <div class="card-desc">Perpustakaan, Lab, Ruang Kelas & Wifi Area</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="#hidden-gems" onclick="showModal('gems')">
+      <div class="card-icon green-bg">💎</div>
+      <div class="card-text">
+        <div class="card-title">Hidden Gems UNTIRTA SS</div>
+        <div class="card-desc">Taman, Spot Foto, Area Olahraga & Nongkrong</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="#student-life" onclick="showModal('kehidupan')">
+      <div class="card-icon purple-bg">🌟</div>
+      <div class="card-text">
+        <div class="card-title">Kehidupan Mahasiswa</div>
+        <div class="card-desc">Organisasi, Seminar, UKM & Volunteer</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+
+  <!-- Info grid -->
+  <div class="info-card">
+    <div class="info-title">📍 Informasi Kampus</div>
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-dot">📍</div>
+        <div>
+          <div class="info-text-title">Lokasi</div>
+          <div class="info-text-sub">Sindangsari, Kec. Pabuaran, Kab. Serang, Banten</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-dot">🎓</div>
+        <div>
+          <div class="info-text-title">Status</div>
+          <div class="info-text-sub">Perguruan Tinggi Negeri</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-dot">🌿</div>
+        <div>
+          <div class="info-text-title">Lingkungan</div>
+          <div class="info-text-sub">Green Campus, Asri & Modern</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-dot">🌐</div>
+        <div>
+          <div class="info-text-title">Website</div>
+          <div class="info-text-sub">www.untirta.ac.id</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quote -->
+  <div class="quote-card">
+    <span class="quote-mark">"</span>
+    <div class="quote-text">
+      Tempat ilmu bertemu pengalaman, melahirkan generasi yang <em>berdaya dan berdampak</em>.
+    </div>
+  </div>
+
+  <!-- Secondary links -->
+  <div class="section-label">📲 Kegiatan & Info</div>
+  <div class="links-group">
+
+    <a class="link-card" href="https://www.untirta.ac.id" target="_blank">
+      <div class="card-icon teal-bg">🌐</div>
+      <div class="card-text">
+        <div class="card-title">Website Resmi UNTIRTA</div>
+        <div class="card-desc">www.untirta.ac.id</div>
+      </div>
+      <div class="card-arrow">↗</div>
+    </a>
+
+    <a class="link-card" href="https://www.instagram.com/untirta.official" target="_blank">
+      <div class="card-icon" style="background:linear-gradient(135deg,#f06292,#ba68c8,#4db6ac)">📸</div>
+      <div class="card-text">
+        <div class="card-title">Instagram @untirta.official</div>
+        <div class="card-desc">Follow untuk update terbaru kampus</div>
+      </div>
+      <div class="card-arrow">↗</div>
+    </a>
+
+    <a class="link-card" href="#pmb" onclick="showModal('pmb')">
+      <div class="card-icon red-bg">📋</div>
+      <div class="card-text">
+        <div class="card-title">Info Penerimaan Mahasiswa</div>
+        <div class="card-desc">Jalur masuk, syarat, dan pendaftaran</div>
+      </div>
+      <div class="card-arrow">→</div>
+      <div class="badge">PMB</div>
+    </a>
+
+  </div>
+
+  <!-- Social row -->
+  <div class="social-row">
+    <a class="social-btn" href="#"><span class="s-icon">📘</span> Facebook</a>
+    <a class="social-btn" href="#"><span class="s-icon">🐦</span> Twitter</a>
+    <a class="social-btn" href="#"><span class="s-icon">▶️</span> YouTube</a>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-logo">UNTIRTA — Universitas Sultan Ageng Tirtayasa</div>
+    <div class="footer-address">Sindangsari, Kec. Pabuaran, Kab. Serang, Banten</div>
+    <div class="made-with">Dibuat dengan <span>♥</span> oleh Kelompok 5</div>
+  </div>
+</div>
+
+<!-- Modal overlay -->
+<div id="modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(10,15,30,0.85);backdrop-filter:blur(12px);padding:20px;overflow-y:auto;" onclick="closeModal(event)">
+  <div id="modal-content" style="max-width:440px;margin:60px auto;background:linear-gradient(135deg,#1a2744,#0d1526);border:1px solid rgba(245,200,66,0.25);border-radius:24px;padding:28px;position:relative;animation:modalIn 0.4s cubic-bezier(0.16,1,0.3,1)both">
+    <button onclick="closeModal(null,true)" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.08);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;">×</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<style>
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+</style>
+
+<script>
+const modals = {
+  tour: {
+    icon: '🗺️',
+    title: 'Virtual Tour Kampus',
+    content: `
+      <p style="color:rgba(255,255,255,0.7);font-size:14px;line-height:1.7;margin-bottom:16px">Kampus utama UNTIRTA berlokasi di Sindangsari, Kabupaten Serang. Dikenal dengan lingkungan hijau, suasana nyaman, dan fasilitas modern yang mendukung pembelajaran inovatif.</p>
+      <div style="display:grid;gap:10px">
+        ${['🏢 Gedung Rektorat Megah','🌿 Taman Kampus Asri','🅿️ Area Parkir Luas','🏃 Jalur Jogging Track'].map(i=>`
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 16px;color:rgba(255,255,255,0.8);font-size:13px">${i}</div>`).join('')}
+      </div>
+    `
+  },
+  fasilitas: {
+    icon: '🏛️',
+    title: 'Fasilitas Kampus',
+    content: `
+      <div style="display:grid;gap:10px">
+        ${[
+          ['📚','Perpustakaan Modern','Koleksi lengkap, nyaman, mendukung literasi mahasiswa'],
+          ['🔬','Laboratorium Terlengkap','Praktikum lebih efektif dengan peralatan berkualitas'],
+          ['💻','Ruang Kelas Nyaman','Kelas modern, ber-AC, dilengkapi teknologi pendukung'],
+          ['💬','Area Diskusi','Ruang kolaborasi untuk ide, diskusi, dan inovasi'],
+          ['📶','Wifi Area','Akses internet cepat di berbagai titik kampus'],
+        ].map(([icon,title,desc])=>`
+        <div style="display:flex;gap:12px;align-items:center;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px">
+          <span style="font-size:24px">${icon}</span>
+          <div>
+            <div style="font-weight:600;font-size:14px;color:white">${title}</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px">${desc}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    `
+  },
+  gems: {
+    icon: '💎',
+    title: 'Hidden Gems UNTIRTA SS',
+    content: `
+      <p style="color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:14px">Tempat menarik di kampus untuk melepas penat, berolahraga, dan berkreasi.</p>
+      <div style="display:grid;gap:10px">
+        ${[
+          ['🌳','Taman Kampus','Ruang hijau yang sejuk dan asri'],
+          ['📸','Spot Foto Estetik','Banyak spot instagramable di setiap sudut kampus'],
+          ['⚽','Area Olahraga','Lapangan luas untuk aktivitas olahraga dan kebugaran'],
+          ['🚶','Jalur Santai','Cocok untuk jogging atau jalan santai pagi dan sore'],
+          ['☕','Tempat Nongkrong','Bersantai dan berkumpul bersama teman'],
+        ].map(([icon,title,desc])=>`
+        <div style="display:flex;gap:12px;align-items:center;background:rgba(255,255,255,0.05);border:1px solid rgba(245,200,66,0.15);border-radius:12px;padding:14px">
+          <span style="font-size:24px">${icon}</span>
+          <div>
+            <div style="font-weight:600;font-size:14px;color:#f5c842">${title}</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px">${desc}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    `
+  },
+  kehidupan: {
+    icon: '🌟',
+    title: 'Kehidupan Mahasiswa',
+    content: `
+      <p style="color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:14px">Belajar tidak hanya di kelas, tapi juga di pengalaman!</p>
+      <div style="display:grid;gap:10px">
+        ${[
+          ['🏅','Organisasi Mahasiswa','Wadah untuk mengembangkan kepemimpinan'],
+          ['🎤','Seminar & Event','Kegiatan inspiratif bersama pembicara dan praktisi'],
+          ['🎨','UKM Seni & Olahraga','Salurkan bakat, asah kemampuan, dan raih prestasi'],
+          ['🤝','Volunteer & Pengabdian','Berbagi manfaat untuk masyarakat dan lingkungan'],
+        ].map(([icon,title,desc])=>`
+        <div style="display:flex;gap:12px;align-items:center;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px">
+          <span style="font-size:24px">${icon}</span>
+          <div>
+            <div style="font-weight:600;font-size:14px;color:white">${title}</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px">${desc}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    `
+  },
+  pmb: {
+    icon: '📋',
+    title: 'Penerimaan Mahasiswa Baru',
+    content: `
+      <div style="display:grid;gap:10px">
+        ${[
+          ['📝','SNBP / SNBT','Seleksi Nasional Berbasis Prestasi & Tes'],
+          ['🏫','Jalur Mandiri','Seleksi mandiri UNTIRTA'],
+          ['💰','Beasiswa Tersedia','Berbagai program beasiswa untuk mahasiswa berprestasi'],
+          ['📞','Kontak Informasi','Kunjungi untirta.ac.id untuk info lebih lanjut'],
+        ].map(([icon,title,desc])=>`
+        <div style="display:flex;gap:12px;align-items:center;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px">
+          <span style="font-size:24px">${icon}</span>
+          <div>
+            <div style="font-weight:600;font-size:14px;color:white">${title}</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px">${desc}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    `
+  }
+};
+
+function showModal(key) {
+  event.preventDefault();
+  const m = modals[key]; if(!m) return;
+  document.getElementById('modal-body').innerHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <span style="font-size:40px">${m.icon}</span>
+      <h2 style="font-family:'Playfair Display',serif;font-size:20px;margin-top:10px;color:white">${m.title}</h2>
+    </div>
+    ${m.content}
+  `;
+  document.getElementById('modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e, force) {
+  if(force || e.target === document.getElementById('modal')) {
+    document.getElementById('modal').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+// Ripple effect
+document.querySelectorAll('.link-card').forEach(card => {
+  card.addEventListener('click', function(e) {
+    const r = document.createElement('span');
+    r.className = 'ripple';
+    const rect = this.getBoundingClientRect();
+    r.style.width = r.style.height = '60px';
+    r.style.left = (e.clientX - rect.left - 30) + 'px';
+    r.style.top = (e.clientY - rect.top - 30) + 'px';
+    this.appendChild(r);
+    setTimeout(() => r.remove(), 700);
+  });
+});
+</script>
+</body>
+</html>
